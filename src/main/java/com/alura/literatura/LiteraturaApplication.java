@@ -6,8 +6,11 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @SpringBootApplication
 public class LiteraturaApplication {
 
-	public static void main(String[] args) {
-		SpringApplication.run(LiteraturaApplication.class, args);
-	}
+  public static void main(String[] args) {
+    SpringApplication.run(LiteraturaApplication.class, args);
+
+    // implementación del código para buscar libros por título
+
+  }
 
 }
