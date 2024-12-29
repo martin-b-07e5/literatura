@@ -14,12 +14,58 @@ public class Main {
 
   ConsumoAPI consumoAPI = new ConsumoAPI();
   ConvierteDatos conversor = new ConvierteDatos();
-//  Datos datos;
+//  Datos datos;  //  2. Top 10 libros más descargados
 
 
   public void muestraElMenu() {
     // json 32 results devuelve
-    System.out.println(consumoAPI.obtenerDatos(URL_BASE));
+//    System.out.println(consumoAPI.obtenerDatos(URL_BASE));
+
+    var bienvenida = """
+        *****************************************************
+        *   ¡BIENVENID@S A LITERALURA!                      *
+        *   La biblioteca virtual donde los libros cobran   *
+        *   vida.                                           *
+        *****************************************************
+        """;
+    System.out.println(bienvenida);
+    int option = -1;
+    while (option != 99) {
+      var menu = """
+           -------------------------------------------------------------
+               Bienvenido a Literatura PRINCIPAL
+           -------------------------------------------------------------
+             1 - Buscar libro por título.
+             2 - Listar libros registrados
+             5 - Listar autores registrados.
+             6 - Listar autores vivos durante un año determinado.
+          
+             4 - Mostrar libros por idiomas.
+            99 - Salir
+          
+            7 - Mostrar libros por autor.
+            3 - Top 10 de los libros más descargados.
+          """;
+      System.out.println(menu);
+
+      try {
+        option = Integer.parseInt(scanner.nextLine());
+      } catch (NumberFormatException e) {
+        System.out.println("---Opción inválida. Elija una opción válida.---\n");
+        continue;
+      }
+
+      switch (option) {
+        // 1 - Buscar libro por título.
+        case 1:
+
+
+      }
+
+
+    } // end while
+
+
   }
 
 
