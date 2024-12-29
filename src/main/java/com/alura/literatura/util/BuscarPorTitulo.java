@@ -13,41 +13,51 @@ import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+/**
+ * Utility class for searching books by title and saving them to the database.
+ */
 @Component
 public class BuscarPorTitulo {
 
   private final LibroService libroService;
 
-  // Inyección de dependencias a través del constructor
+  // Dependency injection through constructor
   public BuscarPorTitulo(LibroService libroService) {
     this.libroService = libroService;
   }
 
-
+  /**
+   * Searches for a book by its title, retrieves information from the API, and saves it to the database if it is found.
+   *
+   * @param scanner    The scanner used to read user input.
+   * @param consumoAPI The service that fetches data from the API.
+   * @param urlSearch  The base URL for the API search endpoint.
+   * @param conversor  The service that converts JSON to Java objects.
+   */
   public void buscarPorTitulo(Scanner scanner, ConsumoAPI consumoAPI, String urlSearch, ConvierteDatos conversor) {
 
-    System.out.print("Ingrese el título del libro: ");
+    // Prompt user to input the book title
+    System.out.print("Enter the book title: ");
     var bookTitle = scanner.nextLine();
     String bookTitleFormatted = bookTitle.replace(" ", "+");
-    System.out.println("\n1. String ingresado: " + bookTitle);
+    System.out.println("\n1. Input String: " + bookTitle);
 
+    // Fetch JSON data from the API
     var json = consumoAPI.obtenerDatos(urlSearch + bookTitle);
 //    System.out.println("JSON: " + json);
 
-    // *** Convertir el JSON a un objeto de la clase DatosLibros
+    // *** Convert the JSON to a DatosLibros object ***
     Datos datosBusqueda = conversor.obtenerDatosx(json, Datos.class);
 //    System.out.println("\ndatosBusqueda: " + datosBusqueda);
 
-    // *** Importante ***
+    // *** Search for the book in the JSON data ***
     Optional<DatosLibros> libroBuscado = datosBusqueda.results().stream()
         .filter(libro -> libro.title().toLowerCase().contains(bookTitleFormatted.toLowerCase()))
         .findFirst();
 
     if (libroBuscado.isPresent()) {
 
-//      System.out.println("------------------------------------------------");
-//      System.out.println("Libro encontrado");
-//      System.out.println(libroBuscado.get());  // trae todos los datos del container
+      // Print book details
       System.out.println("------------------------------------------------");
       System.out.println("Book title: " + libroBuscado.get().title());
       System.out.println("----------");
@@ -70,8 +80,8 @@ public class BuscarPorTitulo {
         System.out.println("Death year: " + libroBuscado.get().authors().stream()
             .map(Author::getDeath_year)
             .findFirst()
-            .orElse(0) // findFirst() devuelve un objeto Optional, por lo que necesitas desencapsular el valor antes de imprimirlo.
-        ); // lambda
+            .orElse(0) // findFirst() returns an Optional, so we need to unbox the value before printing it.
+        );
       } catch (NullPointerException e) {
         System.out.println("Death year: No death date found");
       }
@@ -81,39 +91,38 @@ public class BuscarPorTitulo {
       System.out.println("Downloads: " + libroBuscado.get().download_count());
       System.out.println("------------------------------------------------");
     } /*else {
-      System.out.println("\nNo se encontró el libro con el título ingresado");
+      System.out.println("\nNo book found with the given title");
     }*/
 
-    // Trabajando con estadísticas
+    // Handling statistics
 //    DoubleSummaryStatistics statsByTeacher = datosBusqueda.results().stream()
 //        .filter(d -> d.download_count() > 0)
 //        .collect(Collectors.summarizingDouble(DatosLibros::download_count));
-//    System.out.println("\nEstadísticas de descargas: ");
-//    System.out.println("Mínimo: " + statsByTeacher.getMin());
-//    System.out.println("Máximo: " + statsByTeacher.getMax());
-//    System.out.printf("Promedio: %.2f%n", statsByTeacher.getAverage());
+//    System.out.println("\nDownload statistics: ");
+//    System.out.println("Min: " + statsByTeacher.getMin());
+//    System.out.println("Max: " + statsByTeacher.getMax());
+//    System.out.printf("Average: %.2f%n", statsByTeacher.getAverage());
 
 //    DoubleSummaryStatistics stats = datosBusqueda.results().stream()
 //        .mapToDouble(DatosLibros::download_count)
 //        .summaryStatistics();
-//    System.out.println("\nEstadísticas de descargas:");
-//    System.out.printf("Mínimo: %.0f%n", stats.getMin());
-//    System.out.printf("Máximo: %.0f%n", stats.getMax());
-//    System.out.printf("Promedio: %.0f%n", stats.getAverage());
-//    System.out.printf("Cantidad de registros evaluados para calcular las estadísticas: %d%n", stats.getCount());
+//    System.out.println("\nDownload statistics:");
+//    System.out.printf("Min: %.0f%n", stats.getMin());
+//    System.out.printf("Max: %.0f%n", stats.getMax());
+//    System.out.printf("Average: %.0f%n", stats.getAverage());
+//    System.out.printf("Number of records evaluated for statistics: %d%n", stats.getCount());
 
-    /*Llamamos a la función de guardado desde LibroService*/
+    /*Call the save function from LibroService*/
     if (libroBuscado.isPresent()) {
-      DatosLibros libro = libroBuscado.get(); // Desempaqueta el Optional
-//      System.out.println("Libro encontrado: " + libro.title());
+      DatosLibros libro = libroBuscado.get(); // Unbox the Optional
+//      System.out.println("Book found: " + libro.title());
 
-      // Llamar a saveBook con el objeto desempaquetado
+      // Call saveBook with the unboxed object
       String resultado = libroService.saveBook(libro);
-      System.out.println("\nResultado de guardar el libro: " + resultado);
+      System.out.println("\nResult of saving the book: " + resultado);
     } else {
-      System.out.println("NO SE ENCONTRÓ EL LIBRO CON EL TÍTULO INGRESADO");
+      System.out.println("BOOK WITH THE GIVEN TITLE NOT FOUND");
     }
-
 
   } // end buscarPorTitulo
 
