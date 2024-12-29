@@ -1,7 +1,5 @@
 package com.alura.literatura.main;
 
-import com.alura.literatura.repository.IAutorRepository;
-import com.alura.literatura.repository.ILibroRepository;
 import com.alura.literatura.service.ConsumoAPI;
 import com.alura.literatura.service.ConvierteDatos;
 import com.alura.literatura.service.LibroService;
@@ -14,72 +12,79 @@ import java.util.Scanner;
 @Component
 public class Main {
 
-  Scanner scanner = new Scanner(System.in);
-  String URL_BASE = "https://gutendex.com/books/";
-  String URL_SEARCH = "http://gutendex.com/books/?search=";
+  private static final String URL_BASE = "https://gutendex.com/books/";
+  private static final String URL_SEARCH = "http://gutendex.com/books/?search=";
 
-  ConsumoAPI consumoAPI = new ConsumoAPI();
-  ConvierteDatos conversor = new ConvierteDatos();
-//  Datos datos;  //  2. Top 10 libros más descargados
+  @Autowired
+  private ConsumoAPI consumoAPI;
 
+  @Autowired
+  private ConvierteDatos conversor;
+
+  @Autowired
   private LibroService libroService;
-  private ILibroRepository libroRepository;
-  private IAutorRepository autorRepository;
 
   @Autowired
   private BuscarPorTitulo buscarPorTitulo;
 
+  private final Scanner scanner = new Scanner(System.in);
 
   public void muestraElMenu() {
-    // json 32 results devuelve
-//    System.out.println(consumoAPI.obtenerDatos(URL_BASE));
+    System.out.println("*** BIENVENIDOS A LITERATURA! ***");
 
-    System.out.println("*** BIENVENIDOS A LITERALURA! ***");
     int option = -1;
     while (option != 99) {
-      var menu = """
-           -------------------------------------------------------------
-               Bienvenido a Literatura PRINCIPAL
-           -------------------------------------------------------------
-             1 - Buscar libro por título.
-             2 - Listar libros registrados
-             5 - Listar autores registrados.
-             6 - Listar autores vivos durante un año determinado.
-          
-             4 - Mostrar libros por idiomas.
-            99 - Salir
-          
-            7 - Mostrar libros por autor.
-            3 - Top 10 de los libros más descargados.
-          """;
-      System.out.println(menu);
-
-      try {
-        option = Integer.parseInt(scanner.nextLine());
-      } catch (NumberFormatException e) {
-        System.out.println("---Opción inválida. Elija una opción válida.---\n");
-        continue;
-      }
+      mostrarMenu();
+      option = obtenerOpcion();
 
       switch (option) {
         case 1:
-          // 1. Buscar libros por título
-          buscarPorTitulo.buscarPorTitulo(scanner, consumoAPI, URL_SEARCH, conversor);
+          buscarLibroPorTitulo();
           break;
-
         case 99:
-          System.out.println("Salir");
+          salir();
           break;
-
         default:
-          System.out.println("*** Opción inválida. Por favor elija una opción válida. ***");
-
+          opcionInvalida();
+          break;
       }
-
-    } // end while
-
-
+    }
   }
 
-}
+  private void mostrarMenu() {
+    System.out.println("""
+        -------------------------------------------------------------
+            Bienvenido a Literatura PRINCIPAL
+        -------------------------------------------------------------
+          1 - Buscar libro por título.
+          2 - Listar libros registrados.
+          5 - Listar autores registrados.
+          6 - Listar autores vivos durante un año determinado.
+          4 - Mostrar libros por idiomas.
+          99 - Salir
+          7 - Mostrar libros por autor.
+          3 - Top 10 de los libros más descargados.
+        """);
+  }
 
+  private int obtenerOpcion() {
+    try {
+      return Integer.parseInt(scanner.nextLine());
+    } catch (NumberFormatException e) {
+      System.out.println("--- Opción inválida. Elija una opción válida. ---");
+      return -1;
+    }
+  }
+
+  private void buscarLibroPorTitulo() {
+    buscarPorTitulo.buscarPorTitulo(scanner, consumoAPI, URL_SEARCH, conversor);
+  }
+
+  private void salir() {
+    System.out.println("Salir");
+  }
+
+  private void opcionInvalida() {
+    System.out.println("*** Opción inválida. Por favor elija una opción válida. ***");
+  }
+}
