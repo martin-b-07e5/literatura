@@ -1,19 +1,30 @@
 package com.alura.literatura.util;
 
+import com.alura.literatura.entity.Author;
 import com.alura.literatura.entity.Datos;
 import com.alura.literatura.entity.DatosLibros;
-import com.alura.literatura.entity.Person;
 import com.alura.literatura.service.ConsumoAPI;
 import com.alura.literatura.service.ConvierteDatos;
+import com.alura.literatura.service.LibroService;
+import org.springframework.stereotype.Component;
 
 import java.util.DoubleSummaryStatistics;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
 
+@Component
 public class BuscarPorTitulo {
 
-  public static void buscarPorTitulo(Scanner scanner, ConsumoAPI consumoAPI, String urlSearch, ConvierteDatos conversor) {
+  private final LibroService libroService;
+
+  // Inyección de dependencias a través del constructor
+  public BuscarPorTitulo(LibroService libroService) {
+    this.libroService = libroService;
+  }
+
+
+  public void buscarPorTitulo(Scanner scanner, ConsumoAPI consumoAPI, String urlSearch, ConvierteDatos conversor) {
 
     System.out.print("Ingrese el título del libro: ");
     var bookTitle = scanner.nextLine();
@@ -48,7 +59,7 @@ public class BuscarPorTitulo {
       try {
         //      System.out.println("Birth year: " + libroBuscado.get().authors().stream().map(autor -> autor.getBirth_year()).findFirst()); // lambda
         System.out.println("Birth year: " + libroBuscado.get().authors().stream()
-            .map(Person::getBirth_year)
+            .map(Author::getBirth_year)
             .findFirst()
             .orElse(0) // use orElse() to provide a default value if the Optional is empty.
         ); // method reference
@@ -91,6 +102,19 @@ public class BuscarPorTitulo {
     System.out.printf("Máximo: %.0f%n", stats.getMax());
     System.out.printf("Promedio: %.0f%n", stats.getAverage());
     System.out.printf("Cantidad de registros evaluados para calcular las estadísticas: %d%n", stats.getCount());
+
+    // Llamamos a la función de guardado desde LibroService
+    if (libroBuscado.isPresent()) {
+      DatosLibros libro = libroBuscado.get(); // Desempaqueta el Optional
+      System.out.println("Libro encontrado: " + libro.title());
+
+      // Llamar a saveBook con el objeto desempaquetado
+      String resultado = libroService.saveBook(libro);
+      System.out.println("Resultado de guardar el libro: " + resultado);
+    } else {
+      System.out.println("No se encontró el libro con el título ingresado");
+    }
+
 
   } // end buscarPorTitulo
 
