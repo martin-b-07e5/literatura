@@ -10,43 +10,54 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+/**
+ * Service class that handles the logic for saving and managing books in the system.
+ */
 @Service
 public class LibroService {
 
-  // dependency injection
+  // Dependency Injection for repository interfaces
   @Autowired
   ILibroRepository iLibroRepository;
+
   @Autowired
   IAutorRepository iAutorRepository;
 
+  /**
+   * Saves a book to the database if it doesn't already exist.
+   * If the book is already in the database, it returns a message stating that the book already exists.
+   * Also saves the authors of the book if they are not already in the database.
+   *
+   * @param libroBuscado The book data to be saved.
+   * @return A message indicating whether the book was saved or already exists.
+   */
   public String saveBook(DatosLibros libroBuscado) {
 
-    // Verificar si el libro ya existe en la base de datos por su título
+    // Check if the book already exists in the database by its title
     if (iLibroRepository.existsByTitle(libroBuscado.title())) {
-      return "*** El libro \"" + libroBuscado.title() + "\" ya está registrado en la base de datos.***";
+      return "*** The book \"" + libroBuscado.title() + "\" is already registered in the database. ***";
     }
 
-    // Guardar autores relacionados (si no existen, se guardan)
+    // Save related authors (if they don't exist, they are saved)
     List<Author> autoresGuardados = libroBuscado.authors().stream()
         .map(autor -> iAutorRepository.findByName(autor.getName())
             .orElseGet(() -> iAutorRepository.save(autor)))
         .toList();
 
-    // Verificar si hay autores encontrados
+    // Check if authors were found
     if (autoresGuardados.isEmpty()) {
-      return "No se encontró autor para el libro \"" + libroBuscado.title() + "\". \nNo se puede guardar el libro.";
+      return "No author found for the book \"" + libroBuscado.title() + "\". \nThe book cannot be saved.";
     }
 
-    // Crear entidad Libro
+    // Create a new Book entity
     Libro libro = new Libro();
     libro.setTitle(libroBuscado.title());
     libro.setNumeroDeDescargas(libroBuscado.download_count().intValue());
-    libro.setAuthor(autoresGuardados.get(0)); // Ejemplo: tomar el primer autor.
+    libro.setAuthor(autoresGuardados.get(0)); // Example: take the first author.
 
-    // Guardar libro en la base de datos
+    // Save the book in the database
     iLibroRepository.save(libro);
 
-    return "Libro guardado exitosamente: " + libro.getTitle();
+    return "Book successfully saved: " + libro.getTitle();
   }
-
 }

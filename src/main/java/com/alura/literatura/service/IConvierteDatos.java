@@ -1,11 +1,22 @@
 package com.alura.literatura.service;
 
+/**
+ * Interface that defines a generic method to convert a JSON to a Java object of any type.
+ */
 public interface IConvierteDatos {
-  // Datos genéricos. No sabemos cuál va a ser el retorno. Puede retornarme una cosa u otra.
-  // Pasamos una clase genérica, llamada genericClass.
-  <T> T obtenerDatosx(String json, Class<T> genericClass);
 
-  /* The line <T> T obtenerDatos(String json, Class<T> genericClass);
+  /**
+   * Converts a JSON string into an object of the specified type.
+   *
+   * @param json         The JSON string to be converted.
+   * @param genericClass The class of type T to which the JSON should be converted.
+   * @param <T>          The type of class to which the JSON is converted.
+   * @return The converted object of type T.
+   */
+  <T> T obtenerDatosx(String json, Class<T> genericClass);
+}
+
+/* The line <T> T obtenerDatos(String json, Class<T> genericClass);
     in the interface IConvierteDatos demonstrates the use of generics in Java.
 
 Here's a breakdown of the code:
@@ -24,5 +35,3 @@ By using generics, you can create a method that can work with different types, a
  In this case, the obtenerDatos method can convert a JSON string into an object of any type specified by the genericClass parameter.
   In this specific case, we are using it to convert JSON data into objects of the DatosSerieRecord class.
 */
-
-}
