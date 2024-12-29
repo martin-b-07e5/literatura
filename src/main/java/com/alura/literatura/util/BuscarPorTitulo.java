@@ -8,7 +8,6 @@ import com.alura.literatura.service.ConvierteDatos;
 import com.alura.literatura.service.LibroService;
 import org.springframework.stereotype.Component;
 
-import java.util.DoubleSummaryStatistics;
 import java.util.Optional;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -40,17 +39,14 @@ public class BuscarPorTitulo {
     System.out.print("Enter the book title: ");
     var bookTitle = scanner.nextLine();
     String bookTitleFormatted = bookTitle.replace(" ", "+");
-    System.out.println("\n1. Input String: " + bookTitle);
 
     // Fetch JSON data from the API
     var json = consumoAPI.obtenerDatos(urlSearch + bookTitle);
-//    System.out.println("JSON: " + json);
 
-    // *** Convert the JSON to a DatosLibros object ***
+    // Convert the JSON to a DatosLibros object
     Datos datosBusqueda = conversor.obtenerDatosx(json, Datos.class);
-//    System.out.println("\ndatosBusqueda: " + datosBusqueda);
 
-    // *** Search for the book in the JSON data ***
+    // Search for the book in the JSON data
     Optional<DatosLibros> libroBuscado = datosBusqueda.results().stream()
         .filter(libro -> libro.title().toLowerCase().contains(bookTitleFormatted.toLowerCase()))
         .findFirst();
@@ -66,60 +62,31 @@ public class BuscarPorTitulo {
           .collect(Collectors.joining(", "))
       );
 
-      try {
-        System.out.println("Birth year: " + libroBuscado.get().authors().stream()
-            .map(Author::getBirth_year)
-            .findFirst()
-            .orElse(0)
-        );
-      } catch (NullPointerException e) {
-        System.out.println("Birth year: No birth date found");
-      }
+      libroBuscado.get().authors().stream()
+          .map(Author::getBirth_year)
+          .findFirst()
+          .ifPresentOrElse(
+              birthYear -> System.out.println("Birth year: " + birthYear),
+              () -> System.out.println("Birth year: No birth date found")
+          );
 
-      try {
-        System.out.println("Death year: " + libroBuscado.get().authors().stream()
-            .map(Author::getDeath_year)
-            .findFirst()
-            .orElse(0) // findFirst() returns an Optional, so we need to unbox the value before printing it.
-        );
-      } catch (NullPointerException e) {
-        System.out.println("Death year: No death date found");
-      }
+      libroBuscado.get().authors().stream()
+          .map(Author::getDeath_year)
+          .findFirst()
+          .ifPresentOrElse(
+              deathYear -> System.out.println("Death year: " + deathYear),
+              () -> System.out.println("Death year: No death date found")
+          );
 
       System.out.println("----------");
       System.out.println("Languages: " + libroBuscado.get().languages().stream().collect(Collectors.joining(", ")));
       System.out.println("Downloads: " + libroBuscado.get().download_count());
       System.out.println("------------------------------------------------");
-    } /*else {
-      System.out.println("\nNo book found with the given title");
-    }*/
 
-    // Handling statistics
-//    DoubleSummaryStatistics statsByTeacher = datosBusqueda.results().stream()
-//        .filter(d -> d.download_count() > 0)
-//        .collect(Collectors.summarizingDouble(DatosLibros::download_count));
-//    System.out.println("\nDownload statistics: ");
-//    System.out.println("Min: " + statsByTeacher.getMin());
-//    System.out.println("Max: " + statsByTeacher.getMax());
-//    System.out.printf("Average: %.2f%n", statsByTeacher.getAverage());
-
-//    DoubleSummaryStatistics stats = datosBusqueda.results().stream()
-//        .mapToDouble(DatosLibros::download_count)
-//        .summaryStatistics();
-//    System.out.println("\nDownload statistics:");
-//    System.out.printf("Min: %.0f%n", stats.getMin());
-//    System.out.printf("Max: %.0f%n", stats.getMax());
-//    System.out.printf("Average: %.0f%n", stats.getAverage());
-//    System.out.printf("Number of records evaluated for statistics: %d%n", stats.getCount());
-
-    /*Call the save function from LibroService*/
-    if (libroBuscado.isPresent()) {
-      DatosLibros libro = libroBuscado.get(); // Unbox the Optional
-//      System.out.println("Book found: " + libro.title());
-
-      // Call saveBook with the unboxed object
-      String resultado = libroService.saveBook(libro);
+      // Save the book using the LibroService
+      String resultado = libroService.saveBook(libroBuscado.get());
       System.out.println("\nResult of saving the book: " + resultado);
+
     } else {
       System.out.println("BOOK WITH THE GIVEN TITLE NOT FOUND");
     }
