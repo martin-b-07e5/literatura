@@ -2,6 +2,7 @@ package com.alura.literatura.main;
 
 import com.alura.literatura.service.ConsumoAPI;
 import com.alura.literatura.service.ConvierteDatos;
+import com.alura.literatura.util.BuscarPorTitulo;
 
 import java.util.Scanner;
 
@@ -56,8 +57,10 @@ public class Main {
       }
 
       switch (option) {
-        // 1 - Buscar libro por título.
         case 1:
+          // 1. Buscar libros por título
+          BuscarPorTitulo.buscarPorTitulo(scanner, consumoAPI, URL_SEARCH, conversor);
+          break;
 
 
       }
