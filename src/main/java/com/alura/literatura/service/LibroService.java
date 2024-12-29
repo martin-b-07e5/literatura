@@ -32,6 +32,11 @@ public class LibroService {
             .orElseGet(() -> iAutorRepository.save(autor)))
         .toList();
 
+    // Verificar si hay autores encontrados
+    if (autoresGuardados.isEmpty()) {
+      return "No se encontró autor para el libro \"" + libroBuscado.title() + "\". \nNo se puede guardar el libro.";
+    }
+
     // Crear entidad Libro
     Libro libro = new Libro();
     libro.setTitle(libroBuscado.title());
