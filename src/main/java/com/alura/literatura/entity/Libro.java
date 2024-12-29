@@ -17,6 +17,7 @@ public class Libro {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long idLibro;
 
+  @Column(unique = true)
   private String title;
 
   @ManyToOne

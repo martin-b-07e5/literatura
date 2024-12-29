@@ -13,18 +13,23 @@ import java.util.List;
 @Service
 public class LibroService {
 
+  // dependency injection
   @Autowired
-  ILibroRepository ILibroRepository;
-
+  ILibroRepository iLibroRepository;
   @Autowired
-  IAutorRepository IAutorRepository;
-
+  IAutorRepository iAutorRepository;
 
   public String saveBook(DatosLibros libroBuscado) {
-    // Guardar autores relacionados
+
+    // Verificar si el libro ya existe en la base de datos por su título
+    if (iLibroRepository.existsByTitle(libroBuscado.title())) {
+      return "*** El libro \"" + libroBuscado.title() + "\" ya está registrado en la base de datos.***";
+    }
+
+    // Guardar autores relacionados (si no existen, se guardan)
     List<Author> autoresGuardados = libroBuscado.authors().stream()
-        .map(autor -> IAutorRepository.findByName(autor.getName())
-            .orElseGet(() -> IAutorRepository.save(autor)))
+        .map(autor -> iAutorRepository.findByName(autor.getName())
+            .orElseGet(() -> iAutorRepository.save(autor)))
         .toList();
 
     // Crear entidad Libro
@@ -34,7 +39,7 @@ public class LibroService {
     libro.setAuthor(autoresGuardados.get(0)); // Ejemplo: tomar el primer autor.
 
     // Guardar libro en la base de datos
-    ILibroRepository.save(libro);
+    iLibroRepository.save(libro);
 
     return "Libro guardado exitosamente: " + libro.getTitle();
   }

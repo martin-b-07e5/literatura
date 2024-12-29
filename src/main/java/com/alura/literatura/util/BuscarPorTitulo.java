@@ -82,7 +82,7 @@ public class BuscarPorTitulo {
       System.out.println("Downloads: " + libroBuscado.get().download_count());
 //      System.out.println("------------------------------------------------");
     } else {
-      System.out.println("No se encontró el libro con el título ingresado");
+      System.out.println("\nNO SE ENCONTRÓ EL LIBRO CON EL TÍTULO INGRESADO");
     }
 
     // Trabajando con estadísticas
@@ -110,7 +110,7 @@ public class BuscarPorTitulo {
 
       // Llamar a saveBook con el objeto desempaquetado
       String resultado = libroService.saveBook(libro);
-      System.out.println("Resultado de guardar el libro: " + resultado);
+      System.out.println("\nResultado de guardar el libro: " + resultado);
     } else {
       System.out.println("No se encontró el libro con el título ingresado");
     }
