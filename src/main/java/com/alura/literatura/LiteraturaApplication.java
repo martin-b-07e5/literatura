@@ -20,10 +20,6 @@ public class LiteraturaApplication implements CommandLineRunner {
 
   public static void main(String[] args) {
     SpringApplication.run(LiteraturaApplication.class, args);
-
-    // implementación del código para buscar libros por título
-//    Main app = new Main();
-//    app.muestraElMenu();
   }
 
   @Override
