@@ -1,4 +1,13 @@
 package com.alura.literatura.entity;
 
-public record Datos() {
+import com.fasterxml.jackson.annotation.JsonAlias;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+import java.util.List;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
+public record Datos(
+    @JsonAlias("results") List<DatosLibros> results
+) {
+
 }
