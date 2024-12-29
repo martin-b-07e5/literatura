@@ -3,7 +3,7 @@ package com.alura.literatura.main;
 import com.alura.literatura.service.ConsumoAPI;
 import com.alura.literatura.service.ConvierteDatos;
 import com.alura.literatura.service.LibroService;
-import com.alura.literatura.util.BuscarPorTitulo;
+import com.alura.literatura.service.BuscarPorTitulo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 

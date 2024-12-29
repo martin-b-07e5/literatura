@@ -1,11 +1,8 @@
-package com.alura.literatura.util;
+package com.alura.literatura.service;
 
 import com.alura.literatura.entity.Author;
 import com.alura.literatura.entity.Datos;
 import com.alura.literatura.entity.DatosLibros;
-import com.alura.literatura.service.ConsumoAPI;
-import com.alura.literatura.service.ConvierteDatos;
-import com.alura.literatura.service.LibroService;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
