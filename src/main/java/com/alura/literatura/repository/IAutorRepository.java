@@ -19,4 +19,7 @@ public interface IAutorRepository extends JpaRepository<Author, Long> {
   @Query("SELECT a FROM Author a WHERE a.birth_year <= :year AND (a.death_year IS NULL OR a.death_year >= :year)")
   List<Author> findAutoresVivosDurante(@Param("year") int year);
 
+  // case 7
+  List<Author> findByNameContainingIgnoreCase(String name);
+
 }

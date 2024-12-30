@@ -79,5 +79,19 @@ public class LibroService {
     return iLibroRepository.findByLanguages(idioma);  // Buscar por idioma
   }
 
+  // Método para obtener libros por autor
+  public List<Libro> listarLibrosPorIdAuthor(Long idAuthor) {
+    // Buscar autor por su ID
+    Author autor = iAutorRepository.findById(idAuthor).orElse(null);
+
+    // Si el autor no existe, retornar una lista vacía o manejar el error
+    if (autor == null) {
+      return List.of(); // Retornar lista vacía si el autor no se encuentra
+    }
+
+    // Buscar libros por el autor encontrado
+    return iLibroRepository.findByAuthor(autor);
+  }
+
 
 }

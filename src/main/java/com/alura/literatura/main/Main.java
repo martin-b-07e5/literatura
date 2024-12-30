@@ -9,7 +9,6 @@ import java.util.Scanner;
 @Component
 public class Main {
 
-  private static final String URL_BASE = "https://gutendex.com/books/";
   private static final String URL_SEARCH = "http://gutendex.com/books/?search=";
 
   @Autowired
@@ -53,6 +52,12 @@ public class Main {
         case 5:
           listarLibrosPorIdioma();
           break;
+        case 6:
+          listarLibrosPorIdAutor();
+          break;
+        case 7:
+          listarLibrosPorNameAuthor();
+          break;
         case 99:
           salir();
           break;
@@ -62,6 +67,7 @@ public class Main {
       }
     }
   }
+
 
   private void mostrarMenu() {
     System.out.println("""
@@ -73,8 +79,9 @@ public class Main {
           3 - Listar autores registrados.
           4 - Listar autores vivos durante un año determinado.
           5 - Listar libros por idiomas.
+          6 - Listar libros por idAuthor.
+          7 - Listar libros por nameAuthor.
           99 - Salir
-          7 - Mostrar libros por autor.
           98 - Top 10 de los libros más descargados.
         """);
   }
@@ -166,6 +173,62 @@ public class Main {
           libro.getTitle(),
           libro.getAuthor().getName(),
           libro.getNumeroDeDescargas()));
+    }
+  }
+
+  private void listarLibrosPorIdAutor() {
+    System.out.print("Ingrese el ID del autor para buscar los libros: ");
+    try {
+      Long autorId = Long.parseLong(scanner.nextLine());
+      var libros = libroService.listarLibrosPorIdAuthor(autorId);
+      if (libros.isEmpty()) {
+        System.out.println("No se encontraron libros para este autor.");
+      } else {
+        System.out.println("\n--- Lista de libros de este autor ---");
+        libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d | Idioma: %s%n",
+            libro.getIdLibro(),
+            libro.getTitle(),
+            libro.getAuthor().getName(),
+            libro.getNumeroDeDescargas(),
+            libro.getLanguages()));
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("ID de autor inválido. Por favor, ingrese un ID numérico válido.");
+    }
+  }
+
+  private void listarLibrosPorNameAuthor() {
+    System.out.print("Ingrese el nombre del autor para buscar los libros: ");
+    String nombreAutor = scanner.nextLine();
+    var autores = authorService.buscarAutoresPorNombre(nombreAutor);
+
+    if (autores.isEmpty()) {
+      System.out.printf("No se encontraron autores con el nombre \"%s\".%n", nombreAutor);
+    } else {
+      System.out.println("\n--- Autores encontrados ---");
+      autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s | Nacimiento: %d | Fallecimiento: %s%n",
+          autor.getIdAuthor(),
+          autor.getName(),
+          autor.getBirth_year(),
+          autor.getDeath_year() == null ? "Aún vivo" : autor.getDeath_year()));
+
+//      System.out.print("\nIngrese el ID del autor para listar sus libros: ");
+//      try {
+//        Long idAutor = Long.parseLong(scanner.nextLine());
+//        var libros = libroService.listarLibrosPorIdAuthor(idAutor);
+//        if (libros.isEmpty()) {
+//          System.out.println("No se encontraron libros para este autor.");
+//        } else {
+//          System.out.println("\n--- Lista de libros de este autor ---");
+//          libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Descargas: %d | Idioma: %s%n",
+//              libro.getIdLibro(),
+//              libro.getTitle(),
+//              libro.getNumeroDeDescargas(),
+//              libro.getLanguages()));
+//        }
+//      } catch (NumberFormatException e) {
+//        System.out.println("ID de autor inválido. Por favor, ingrese un ID numérico válido.");
+//      }
     }
   }
 

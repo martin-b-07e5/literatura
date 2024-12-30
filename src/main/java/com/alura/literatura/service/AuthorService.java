@@ -38,4 +38,9 @@ public class AuthorService {
     return iAutorRepository.findAutoresVivosDurante(year);
   }
 
+  public List<Author> buscarAutoresPorNombre(String nombre) {
+    return iAutorRepository.findByNameContainingIgnoreCase(nombre);
+  }
+
+
 }

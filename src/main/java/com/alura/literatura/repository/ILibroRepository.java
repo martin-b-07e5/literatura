@@ -1,5 +1,6 @@
 package com.alura.literatura.repository;
 
+import com.alura.literatura.entity.Author;
 import com.alura.literatura.entity.Libro;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
@@ -15,5 +16,8 @@ public interface ILibroRepository extends JpaRepository<Libro, Long> {
 
   // Método para encontrar todos los libros por idioma
   List<Libro> findByLanguages(String languages);
+
+  // Método para encontrar libros por autor
+  List<Libro> findByAuthor(Author author);
 
 }
