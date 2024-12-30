@@ -27,7 +27,5 @@ public class Libro {
 
   private Integer numeroDeDescargas;
 
-  // incomplete
-
 
 }

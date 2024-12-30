@@ -15,9 +15,9 @@
     ✅1- Buscar libro por título
     ✅2- Listar libros registrados
     ✅3- Listar autores registrados
-    👷4- Listar autores vivos en un determinado año
+    ✅4- Listar autores vivos en un determinado año
     👷5- Listar libros por idioma
-    👷6- Salir de la app
+    ✅6- Salir de la app
 
 ---
 
@@ -49,10 +49,11 @@
 - Funcionalidad implementada:
     - **Buscar libro por título:** Implementado a través del servicio `BuscarPorTitulo`.
     - **Infraestructura base:** Comunicación con la API y conversión de datos JSON a objetos Java.
-
-- Funcionalidad pendiente o incompleta:
     - **Autores vivos en un año y libros por idioma:** Necesario definir lógica para filtrar y listar datos según los
       criterios.
+
+- Funcionalidad pendiente o incompleta:
+
     - **Top 10 libros más descargados y mostrar libros por autor:** Aún no implementado.
 
 ---

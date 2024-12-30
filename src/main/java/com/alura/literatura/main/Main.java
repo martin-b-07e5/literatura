@@ -47,6 +47,9 @@ public class Main {
         case 3:
           listarAutoresRegistrados();
           break;
+        case 4:
+          listarAutoresVivosDuranteAnio();
+          break;
         case 99:
           salir();
           break;
@@ -66,7 +69,7 @@ public class Main {
           1 - Buscar libro por título.
           2 - Listar libros registrados.
           3 - Listar autores registrados.
-          6 - Listar autores vivos durante un año determinado.
+          4 - Listar autores vivos durante un año determinado.
           4 - Mostrar libros por idiomas.
           99 - Salir
           7 - Mostrar libros por autor.
@@ -116,9 +119,34 @@ public class Main {
       System.out.println("No hay autores registrados.");
     } else {
       System.out.println("\n--- Lista de autores registrados ---");
-      autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s%n",
+      autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s | Birth: %d | Death: %s%n",
           autor.getIdAuthor(),
-          autor.getName()));
+          autor.getName(),
+          autor.getBirth_year(),
+          autor.getDeath_year() == null ? "Aún vivo" : autor.getDeath_year()
+      ));
+
+
+    }
+  }
+
+  private void listarAutoresVivosDuranteAnio() {
+    System.out.print("Ingrese el año para buscar autores vivos: ");
+    try {
+      int year = Integer.parseInt(scanner.nextLine());
+      var autores = authorService.listarAutoresVivosDurante(year);
+      if (autores.isEmpty()) {
+        System.out.printf("No hay autores registrados que estuvieran vivos en el año %d.%n", year);
+      } else {
+        System.out.printf("\n--- Autores vivos en el año %d ---\n", year);
+        autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s | Nacimiento: %d | Fallecimiento: %s%n",
+            autor.getIdAuthor(),
+            autor.getName(),
+            autor.getBirth_year(),
+            autor.getDeath_year() == null ? "Aún vivo" : autor.getDeath_year()));
+      }
+    } catch (NumberFormatException e) {
+      System.out.println("Año inválido. Por favor, ingrese un año numérico válido.");
     }
   }
 

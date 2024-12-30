@@ -23,4 +23,19 @@ public class AuthorService {
     return iAutorRepository.findAll();
   }
 
+  /**
+   * Retrieves a list of authors who were alive during a specific year.
+   *
+   * @param year The year to check
+   * @return List of authors alive during the year
+   */
+//  public List<Author> listarAutoresVivosDurante(int year) {
+//    return iAutorRepository.findAll().stream()
+//        .filter(autor -> autor.getBirth_year() <= year && (autor.getDeath_year() == null || autor.getDeath_year() >= year))
+//        .toList();
+//  }
+  public List<Author> listarAutoresVivosDurante(int year) {
+    return iAutorRepository.findAutoresVivosDurante(year);
+  }
+
 }
