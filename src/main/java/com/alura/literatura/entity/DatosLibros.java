@@ -17,4 +17,11 @@ public record DatosLibros(
 //    @JsonAlias("media_type") String media_type,
 
 ) {
+  // Método para obtener el primer idioma de la lista (si existe)
+  public String getFirstLanguage() {
+    if (languages != null && !languages.isEmpty()) {
+      return languages.get(0);  // Retorna el primer idioma
+    }
+    return null;
+  }
 }

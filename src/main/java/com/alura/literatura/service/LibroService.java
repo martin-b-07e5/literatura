@@ -56,15 +56,27 @@ public class LibroService {
     libro.setNumeroDeDescargas(libroBuscado.download_count().intValue());
     libro.setAuthor(autoresGuardados.get(0)); // Example: take the first author.
 
+    // Set the first language from the languages list (if available)
+    if (libroBuscado.languages() != null && !libroBuscado.languages().isEmpty()) {
+      libro.setLanguage(libroBuscado.getFirstLanguage());  // Assign the first language
+    }
+
     // Save the book in the database
     iLibroRepository.save(libro);
 
     return "Book successfully saved: " + libro.getTitle();
   }
 
-
   public List<Libro> listarTodosLosLibros() {
     return iLibroRepository.findAll();
+  }
+
+  public List<Libro> listarLibrosPorIdioma(String idioma) {
+//    return iLibroRepository.findByLanguage(idioma);
+    if (idioma == null || idioma.isEmpty()) {
+      return iLibroRepository.findAll();  // O una lógica para manejar búsquedas sin idioma
+    }
+    return iLibroRepository.findByLanguage(idioma);  // Buscar por idioma
   }
 
 

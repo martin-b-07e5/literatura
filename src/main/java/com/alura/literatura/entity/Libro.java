@@ -7,11 +7,11 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 @Entity
+@Table(name = "libros")
 @Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "libros")
 public class Libro {
 
   @Id
@@ -21,11 +21,12 @@ public class Libro {
   @Column(unique = true)
   private String title;
 
-  @ManyToOne
-  @JoinColumn(name = "id_author")
-  private Author author;
+  private String language;
 
   private Integer numeroDeDescargas;
 
+  @ManyToOne
+  @JoinColumn(name = "id_author")
+  private Author author;
 
 }

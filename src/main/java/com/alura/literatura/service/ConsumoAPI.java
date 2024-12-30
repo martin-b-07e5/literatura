@@ -39,7 +39,7 @@ public class ConsumoAPI {
     }
 
     // Returning the body of the response
-//    System.out.println("response.body() = " + response.body());
+    System.out.println("response.body() = " + response.body());
     return response.body();
   }
 }

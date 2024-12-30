@@ -50,6 +50,9 @@ public class Main {
         case 4:
           listarAutoresVivosDuranteAnio();
           break;
+        case 5:
+          listarLibrosPorIdioma();
+          break;
         case 99:
           salir();
           break;
@@ -60,7 +63,6 @@ public class Main {
     }
   }
 
-
   private void mostrarMenu() {
     System.out.println("""
         -------------------------------------------------------------
@@ -70,7 +72,7 @@ public class Main {
           2 - Listar libros registrados.
           3 - Listar autores registrados.
           4 - Listar autores vivos durante un año determinado.
-          4 - Mostrar libros por idiomas.
+          5 - Listar libros por idiomas.
           99 - Salir
           7 - Mostrar libros por autor.
           98 - Top 10 de los libros más descargados.
@@ -104,11 +106,12 @@ public class Main {
       System.out.println("No hay libros registrados.");
     } else {
       System.out.println("\n--- Lista de libros registrados ---");
-      libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d%n",
+      libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d | language: %s%n",
           libro.getIdLibro(),
           libro.getTitle(),
           libro.getAuthor().getName(),
-          libro.getNumeroDeDescargas()
+          libro.getNumeroDeDescargas(),
+          libro.getLanguage()
       ));
     }
   }
@@ -147,6 +150,22 @@ public class Main {
       }
     } catch (NumberFormatException e) {
       System.out.println("Año inválido. Por favor, ingrese un año numérico válido.");
+    }
+  }
+
+  private void listarLibrosPorIdioma() {
+    System.out.print("Ingrese el idioma para buscar los libros: ");
+    String idioma = scanner.nextLine();
+    var libros = libroService.listarLibrosPorIdioma(idioma);
+    if (libros.isEmpty()) {
+      System.out.printf("No hay libros registrados en el idioma %s.%n", idioma);
+    } else {
+      System.out.printf("\n--- Lista de libros en el idioma %s ---\n", idioma);
+      libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d%n",
+          libro.getIdLibro(),
+          libro.getTitle(),
+          libro.getAuthor().getName(),
+          libro.getNumeroDeDescargas()));
     }
   }
 
