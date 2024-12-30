@@ -12,20 +12,21 @@ public class Main {
 
   private static final String URL_SEARCH = "http://gutendex.com/books/?search=";
 
-  @Autowired
-  private ConsumoAPI consumoAPI;
+  private final ConsumoAPI consumoAPI;
+  private final ConvierteDatos conversor;
+  private final LibroService libroService;
+  private final BuscarPorTitulo buscarPorTitulo;
+  private final AuthorService authorService;
 
   @Autowired
-  private ConvierteDatos conversor;
-
-  @Autowired
-  private LibroService libroService;
-
-  @Autowired
-  private BuscarPorTitulo buscarPorTitulo;
-
-  @Autowired
-  private AuthorService authorService;
+  public Main(ConsumoAPI consumoAPI, ConvierteDatos conversor, LibroService libroService,
+              BuscarPorTitulo buscarPorTitulo, AuthorService authorService) {
+    this.consumoAPI = consumoAPI;
+    this.conversor = conversor;
+    this.libroService = libroService;
+    this.buscarPorTitulo = buscarPorTitulo;
+    this.authorService = authorService;
+  }
 
   private final Scanner scanner = new Scanner(System.in);
 
