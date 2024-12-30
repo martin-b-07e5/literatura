@@ -199,7 +199,6 @@ public class Main {
     }
   }
 
-
   private void listarLibrosPorNameAuthor() {
     System.out.print("Ingrese el nombre del autor para buscar los libros: ");
     String nombreAutor = scanner.nextLine();
@@ -207,46 +206,51 @@ public class Main {
 
     if (autores.isEmpty()) {
       System.out.printf("No se encontraron autores con el nombre \"%s\".%n", nombreAutor);
-    } else if (autores.size() == 1) {
-      // Si hay un único autor, listar sus libros directamente
-      Author autor = autores.get(0);
-      System.out.printf("\n--- Libros del autor: %s ---\n", autor.getName());
-      var libros = libroService.listarLibrosPorIdAuthor(autor.getIdAuthor());
-      if (libros.isEmpty()) {
-        System.out.println("Este autor no tiene libros registrados.");
-      } else {
-        libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Descargas: %d | Idioma: %s%n",
-            libro.getIdLibro(),
-            libro.getTitle(),
-            libro.getNumeroDeDescargas(),
-            libro.getLanguages()));
-      }
-    } else {
-      // Si hay múltiples autores, listarlos y permitir la selección
-      System.out.println("\n--- Autores encontrados ---");
-      autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s | Nacimiento: %d | Fallecimiento: %s%n",
-          autor.getIdAuthor(),
-          autor.getName(),
-          autor.getBirth_year(),
-          autor.getDeath_year() == null ? "Aún vivo" : autor.getDeath_year()));
+      return;
+    }
 
-      System.out.print("\nSeleccione el ID del autor para listar sus libros: ");
-      try {
-        Long idAutor = Long.parseLong(scanner.nextLine());
-        var libros = libroService.listarLibrosPorIdAuthor(idAutor);
-        if (libros.isEmpty()) {
-          System.out.println("Este autor no tiene libros registrados.");
-        } else {
-          System.out.println("\n--- Lista de libros de este autor ---");
-          libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Descargas: %d | Idioma: %s%n",
-              libro.getIdLibro(),
-              libro.getTitle(),
-              libro.getNumeroDeDescargas(),
-              libro.getLanguages()));
-        }
-      } catch (NumberFormatException e) {
-        System.out.println("ID de autor inválido. Por favor, ingrese un ID numérico válido.");
+    if (autores.size() == 1) {
+      mostrarLibrosDeAutor(autores.get(0));
+      return;
+    }
+
+    System.out.println("\n--- Autores encontrados ---");
+    autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s | Nacimiento: %d | Fallecimiento: %s%n",
+        autor.getIdAuthor(),
+        autor.getName(),
+        autor.getBirth_year(),
+        autor.getDeath_year() == null ? "Aún vivo" : autor.getDeath_year()));
+
+    System.out.print("\nSeleccione el ID del autor para listar sus libros: ");
+    try {
+      Long idAutor = Long.parseLong(scanner.nextLine());
+      var autorSeleccionado = autores.stream()
+          .filter(autor -> autor.getIdAuthor().equals(idAutor))
+          .findFirst()
+          .orElse(null);
+
+      if (autorSeleccionado != null) {
+        mostrarLibrosDeAutor(autorSeleccionado);
+      } else {
+        System.out.println("El ID ingresado no corresponde a ningún autor listado.");
       }
+    } catch (NumberFormatException e) {
+      System.out.println("ID de autor inválido. Por favor, ingrese un ID numérico válido.");
+    }
+  }
+
+  private void mostrarLibrosDeAutor(Author autor) {
+    System.out.printf("\n--- Libros del autor: %s ---\n", autor.getName());
+    var libros = libroService.listarLibrosPorIdAuthor(autor.getIdAuthor());
+
+    if (libros.isEmpty()) {
+      System.out.println("Este autor no tiene libros registrados.");
+    } else {
+      libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Descargas: %d | Idioma: %s%n",
+          libro.getIdLibro(),
+          libro.getTitle(),
+          libro.getNumeroDeDescargas(),
+          libro.getLanguages()));
     }
   }
 
