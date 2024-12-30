@@ -93,5 +93,10 @@ public class LibroService {
     return iLibroRepository.findByAuthor(autor);
   }
 
+  // top10LibrosDescargados
+  public List<Libro> obtenerTop10LibrosDescargados() {
+    return iLibroRepository.findTop10ByOrderByNumeroDeDescargasDesc();
+  }
+
 
 }

@@ -20,4 +20,7 @@ public interface ILibroRepository extends JpaRepository<Libro, Long> {
   // Método para encontrar libros por autor
   List<Libro> findByAuthor(Author author);
 
+  List<Libro> findTop10ByOrderByNumeroDeDescargasDesc();
+
+
 }

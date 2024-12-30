@@ -60,6 +60,9 @@ public class Main {
         case 7:
           listarLibrosPorNameAuthor();
           break;
+        case 8:
+          top10LibrosDescargados();
+          break;
         case 99:
           salir();
           break;
@@ -83,8 +86,8 @@ public class Main {
           5 - Listar libros por idiomas.
           6 - Listar libros por idAuthor.
           7 - Listar libros por nameAuthor.
+          8 - Top 10 de los libros más descargados.
           99 - Salir
-          98 - Top 10 de los libros más descargados.
         """);
   }
 
@@ -246,6 +249,23 @@ public class Main {
     if (libros.isEmpty()) {
       System.out.println("Este autor no tiene libros registrados.");
     } else {
+      libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Descargas: %d | Idioma: %s%n",
+          libro.getIdLibro(),
+          libro.getTitle(),
+          libro.getNumeroDeDescargas(),
+          libro.getLanguages()));
+    }
+  }
+
+
+  private void top10LibrosDescargados() {
+    System.out.println("\n--- Top 10 Libros Más Descargados ---");
+    var libros = libroService.obtenerTop10LibrosDescargados();
+
+    if (libros.isEmpty()) {
+      System.out.println("No hay libros registrados en la base de datos.");
+    } else {
+      System.out.println("\ntop10LibrosDescargados");
       libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Descargas: %d | Idioma: %s%n",
           libro.getIdLibro(),
           libro.getTitle(),
