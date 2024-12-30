@@ -21,7 +21,7 @@ public class Libro {
   @Column(unique = true)
   private String title;
 
-  private String language;
+  private String languages;
 
   private Integer numeroDeDescargas;
 

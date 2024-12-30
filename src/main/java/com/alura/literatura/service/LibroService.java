@@ -58,7 +58,7 @@ public class LibroService {
 
     // Set the first language from the languages list (if available)
     if (libroBuscado.languages() != null && !libroBuscado.languages().isEmpty()) {
-      libro.setLanguage(libroBuscado.getFirstLanguage());  // Assign the first language
+      libro.setLanguages(libroBuscado.getFirstLanguage());  // Assign the first language
     }
 
     // Save the book in the database
@@ -76,7 +76,7 @@ public class LibroService {
     if (idioma == null || idioma.isEmpty()) {
       return iLibroRepository.findAll();  // O una lógica para manejar búsquedas sin idioma
     }
-    return iLibroRepository.findByLanguage(idioma);  // Buscar por idioma
+    return iLibroRepository.findByLanguages(idioma);  // Buscar por idioma
   }
 
 

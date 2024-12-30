@@ -14,6 +14,6 @@ public interface ILibroRepository extends JpaRepository<Libro, Long> {
   boolean existsByTitle(String title);
 
   // Método para encontrar todos los libros por idioma
-  List<Libro> findByLanguage(String language);
+  List<Libro> findByLanguages(String languages);
 
 }

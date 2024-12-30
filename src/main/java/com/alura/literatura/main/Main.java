@@ -111,7 +111,7 @@ public class Main {
           libro.getTitle(),
           libro.getAuthor().getName(),
           libro.getNumeroDeDescargas(),
-          libro.getLanguage()
+          libro.getLanguages()
       ));
     }
   }
