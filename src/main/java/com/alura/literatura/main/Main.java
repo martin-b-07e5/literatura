@@ -1,9 +1,6 @@
 package com.alura.literatura.main;
 
-import com.alura.literatura.service.ConsumoAPI;
-import com.alura.literatura.service.ConvierteDatos;
-import com.alura.literatura.service.LibroService;
-import com.alura.literatura.service.BuscarPorTitulo;
+import com.alura.literatura.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
@@ -27,6 +24,9 @@ public class Main {
   @Autowired
   private BuscarPorTitulo buscarPorTitulo;
 
+  @Autowired
+  private AuthorService authorService;
+
   private final Scanner scanner = new Scanner(System.in);
 
   public void muestraElMenu() {
@@ -43,6 +43,9 @@ public class Main {
           break;
         case 2:
           listarLibrosRegistrados();
+          break;
+        case 3:
+          listarAutoresRegistrados();
           break;
         case 99:
           salir();
@@ -62,12 +65,12 @@ public class Main {
         -------------------------------------------------------------
           1 - Buscar libro por título.
           2 - Listar libros registrados.
-          5 - Listar autores registrados.
+          3 - Listar autores registrados.
           6 - Listar autores vivos durante un año determinado.
           4 - Mostrar libros por idiomas.
           99 - Salir
           7 - Mostrar libros por autor.
-          3 - Top 10 de los libros más descargados.
+          98 - Top 10 de los libros más descargados.
         """);
   }
 
@@ -98,13 +101,24 @@ public class Main {
       System.out.println("No hay libros registrados.");
     } else {
       System.out.println("\n--- Lista de libros registrados ---");
-      libros.forEach(libro -> {
-        System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d%n",
-            libro.getIdLibro(),
-            libro.getTitle(),
-            libro.getAuthor().getName(),
-            libro.getNumeroDeDescargas());
-      });
+      libros.forEach(libro -> System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d%n",
+          libro.getIdLibro(),
+          libro.getTitle(),
+          libro.getAuthor().getName(),
+          libro.getNumeroDeDescargas()
+      ));
+    }
+  }
+
+  private void listarAutoresRegistrados() {
+    var autores = authorService.listarTodosLosAutores();
+    if (autores.isEmpty()) {
+      System.out.println("No hay autores registrados.");
+    } else {
+      System.out.println("\n--- Lista de autores registrados ---");
+      autores.forEach(autor -> System.out.printf("ID: %d | Nombre: %s%n",
+          autor.getIdAuthor(),
+          autor.getName()));
     }
   }
 
