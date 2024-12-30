@@ -41,6 +41,9 @@ public class Main {
         case 1:
           buscarLibroPorTitulo();
           break;
+        case 2:
+          listarLibrosRegistrados();
+          break;
         case 99:
           salir();
           break;
@@ -50,6 +53,7 @@ public class Main {
       }
     }
   }
+
 
   private void mostrarMenu() {
     System.out.println("""
@@ -76,10 +80,6 @@ public class Main {
     }
   }
 
-  private void buscarLibroPorTitulo() {
-    buscarPorTitulo.buscarPorTitulo(scanner, consumoAPI, URL_SEARCH, conversor);
-  }
-
   private void salir() {
     System.out.println("Salir");
   }
@@ -87,4 +87,26 @@ public class Main {
   private void opcionInvalida() {
     System.out.println("*** Opción inválida. Por favor elija una opción válida. ***");
   }
+
+  private void buscarLibroPorTitulo() {
+    buscarPorTitulo.buscarPorTitulo(scanner, consumoAPI, URL_SEARCH, conversor);
+  }
+
+  private void listarLibrosRegistrados() {
+    var libros = libroService.listarTodosLosLibros();
+    if (libros.isEmpty()) {
+      System.out.println("No hay libros registrados.");
+    } else {
+      System.out.println("\n--- Lista de libros registrados ---");
+      libros.forEach(libro -> {
+        System.out.printf("ID: %d | Título: %s | Autor: %s | Descargas: %d%n",
+            libro.getIdLibro(),
+            libro.getTitle(),
+            libro.getAuthor().getName(),
+            libro.getNumeroDeDescargas());
+      });
+    }
+  }
+
+
 }

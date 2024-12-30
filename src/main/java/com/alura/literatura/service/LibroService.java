@@ -23,6 +23,7 @@ public class LibroService {
   @Autowired
   IAutorRepository iAutorRepository;
 
+
   /**
    * Saves a book to the database if it doesn't already exist.
    * If the book is already in the database, it returns a message stating that the book already exists.
@@ -60,4 +61,11 @@ public class LibroService {
 
     return "Book successfully saved: " + libro.getTitle();
   }
+
+
+  public List<Libro> listarTodosLosLibros() {
+    return iLibroRepository.findAll();
+  }
+
+
 }
