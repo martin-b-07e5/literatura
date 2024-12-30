@@ -1,0 +1,33 @@
+----------------------------------------------------------------------
+literatura tree
+./literatura
+
+.
+├── src
+│├── main
+││├── java
+│││└── com
+│││    └── alura
+│││        └── literatura
+│││            ├── entity
+│││            │├── Author.java
+│││            │├── Datos.java
+│││            │├── DatosLibros.java
+│││            │└── Libro.java
+│││            ├── main
+│││            │└── Main.java
+│││            ├── repository
+│││            │├── IAutorRepository.java
+│││            │└── ILibroRepository.java
+│││            ├── service
+│││            │├── BuscarPorTitulo.java
+│││            │├── ConsumoAPI.java
+│││            │├── ConvierteDatos.java
+│││            │├── IConvierteDatos.java
+│││            │└── LibroService.java
+│││            └── LiteraturaApplication.java
+││└── resources
+││    └── application.properties
+├── HELP.md
+├── pom.xml
+----------------------------------------------------------------------
